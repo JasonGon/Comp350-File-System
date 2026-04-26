@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 // Project 3
 
 int main() {
 
 	// The user input determines which function to run
-	char input[10];
+	char input[40];
 
 	// Set up a virtual disk. Use w+ so that the file can be written to
 	FILE *virtualDisk = fopen("disk.bin", "w+");
@@ -28,8 +29,23 @@ int main() {
 		printf("1: format\n2: create <filename>\n3: read <filename>\n4: write <filename> <type the content after the prompt>\n5: delete <filename>\n6: ls\n7: exit\n");
 
 		// Ignore empty lines
-		if (fgets(input, 10, stdin) == NULL){
+		if (fgets(input, 40, stdin) == NULL){
 			continue;
+		}
+
+		// 1. Reformats the entire disk
+		if (strcmp(input, "format\n") == 0) {
+			printf("\nReformatting disk...\n");
+			for (int i = 0; i < 100; i++){
+				fwrite("{0}", 512, 1, virtualDisk);
+			}
+			printf("\nDone!\n\n");
+		}
+
+
+		// 7. Exit the program
+		if (strcmp(input, "exit\n") == 0){
+			break;
 		}
 
 
