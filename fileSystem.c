@@ -48,6 +48,14 @@ int main() {
 			break;
 		}
 
+		// 2. Create a file (WIP)
+		if (strcmp(input, "create\n") == 0){
+			printf("\nPlease enter a file name:\n");
+
+			char name[100];
+			scanf("%s", name);
+			fopen(("disk.bin\{%s}",name), "w");
+		}
 
 
 	}
