@@ -14,14 +14,14 @@ int main() {
 	#define DISK_BLOCKS 100	         // Disk has 100 empty slots
 	#define BLOCK_SIZE 512		 // Each disk can hold 512 bytes
 	#define RESERVED_BLOCKS 10	 // blocks 0-9 and saves them for free map region
-	printf("Formatting Disk...\n");
+	printf("\nFormatting Disk...\n");
 
 	// Define the simulated disk, the map for free space, and the file name per block
 	static char disk[DISK_BLOCKS][BLOCK_SIZE];
 	static unsigned char freeMap[DISK_BLOCKS];	// A 0 means a spot is free and 1 means full
 	static char fileTable[DISK_BLOCKS][64];		// " " means no file
 
-	printf("Disk formatted successfully. FreeMap blocks 0-9 are now allocated.\n");
+	printf("\nDisk formatted successfully. FreeMap blocks 0-9 are now allocated.\n\n");
 
 	// Run forever
 	while (true) {
@@ -38,9 +38,9 @@ int main() {
 		// 1. Reformats the entire disk
 		if (strcmp(input, "format\n") == 0) {
 			printf("\nReformatting disk...\n");
-			//for (int i = 0; i < 100; i++){
-			//	fwrite("{0}", 512, 1, virtualDisk);
-			//}
+			for (int i = 0; i < 100; i++){
+				freeMap[i] = 0;
+			}
 			printf("\nDone!\n\n");
 		}
 
