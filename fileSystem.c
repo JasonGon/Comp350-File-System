@@ -38,8 +38,11 @@ int main() {
 		// 1. Reformats the entire disk
 		if (strcmp(input, "format\n") == 0) {
 			printf("\nReformatting disk...\n");
+
+			// Wipe the freeMap and fileTable
 			for (int i = 0; i < 100; i++){
 				freeMap[i] = 0;
+				//fileTable[i] = "";
 			}
 			printf("\nDone!\n\n");
 		}
@@ -56,7 +59,17 @@ int main() {
 
 			char name[100];
 			scanf("%s", name);
-			//fopen(("disk.bin\{%s}",name), "w");
+
+			// Loop through the freeMap until you find an empty slot
+			for (int i = 0; i < 100; i++){
+				if (freeMap[i] == 0){
+
+					// That spot becomes the new file
+					freeMap[i] = 1;
+					//fileTable[i] = name;
+					break;
+				}
+			}
 		}
 
 
