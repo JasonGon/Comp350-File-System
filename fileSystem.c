@@ -66,17 +66,21 @@ int main() {
 
 			char name[100];		// Name will be the new file created
 			sscanf(input + 7, "%s", name);
-
+			int location;
 			// Loop through the freeMap until you find an empty slot
-			for (int i = 10; i < 100; i++){
+			for (int i = 10; i <= 100; i++){
 				if (freeMap[i] == 0){
 					// That spot becomes the new file
 					freeMap[i] = 1;
 					strcpy(fileTable[i], name);
+					printf("\nDone!\n\n");
+					break;
+				}
+				if (i == 100) {
+					printf("\nThere is no available space. Please delete a file before trying to create a new one.\n\n");
 					break;
 				}
 			}
-			printf("\nDone!\n\n");
 		}
 
 		// 6. LS (Reads all files on the disk)
