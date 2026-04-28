@@ -69,7 +69,7 @@ int main() {
 			int location;
 			// Loop through the freeMap until you find an empty slot
 			for (int i = 10; i <= 100; i++){
-				if (freeMap[i] == 0){
+				if (freeMap[i] == 0 && i < 100){
 					// That spot becomes the new file
 					freeMap[i] = 1;
 					strcpy(fileTable[i], name);
