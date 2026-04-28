@@ -62,11 +62,10 @@ int main() {
 		}
 
 		// 2. Create a file
-		else if (strcmp(input, "create\n") == 0){
-			printf("\nPlease enter a file name:\n");
+		else if (strncmp(input, "create ", 7) == 0){
 
 			char name[100];		// Name will be the new file created
-			scanf("%s", name);
+			sscanf(input + 7, "%s", name);
 
 			// Loop through the freeMap until you find an empty slot
 			for (int i = 10; i < 100; i++){
@@ -92,7 +91,23 @@ int main() {
 				}
 			}
 		}
+		else if (strncmp(input, "delete ", 7) == 0) { //delete function
+			char filename[64];
+			sscanf(input + 7, "%s", filename);
 
-
+			bool found = false;
+			for (int i = 0; i < DISK_BLOCKS; i++) {
+				if(strcmp(fileTable[i], filename) == 0) {
+					freeMap[i] = 0;
+					memset(disk[i], 0, BLOCK_SIZE);
+					memset(fileTable[i], 0, 64);
+					printf("\nFile '%s' deleted. \n", filename);
+					found = true;
+				}
+			}
+			if (!found) {
+				printf("\nFile '%s' not found.\n", filename);
+			}
+		}
 	}
 }
