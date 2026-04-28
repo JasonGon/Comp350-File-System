@@ -83,6 +83,28 @@ int main() {
 			}
 		}
 
+		// 3. Read (Given a filename, finds block, and prints content on screen)
+		else if (strncmp(input, "read ", 5) == 0) {
+			char filename[32];
+			// reads filename after "read ".
+			sscanf(input + 5, "%s", filename);
+			// keeping track if we find the file.
+			bool found = false;
+			// setting up search, Validates blocks, and Prints the file content.
+			for (int i = 10; i < DISK_BLOCKS; i++){
+				if (freeMap[i] == 1 && strcmp(fileTable[i], filename) == 0) {
+					printf("---Content of '%s' --- \n", filename);
+					printf("%s\n", disk[i]);
+					found = true;
+					break;
+				}
+		 	}
+			// if file is not found prints error.
+			if (!found) {
+				printf("Error File '%s' was not found.\n", filename);
+			}
+		}
+
 		// 6. LS (Reads all files on the disk)
 		else if (strcmp(input, "ls\n") == 0){
 
