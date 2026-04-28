@@ -80,6 +80,19 @@ int main() {
 			printf("\nDone!\n\n");
 		}
 
+		// 6. LS (Reads all files on the disk)
+		else if (strcmp(input, "ls\n") == 0){
+
+			// Loop through each spot
+			for (int i = 10; i < 100; i++){
+
+				// If there is something there, print it
+				if (freeMap[i] == 1){
+					printf("\n%s\n\n", fileTable[i]);
+				}
+			}
+		}
+
 
 	}
 }
