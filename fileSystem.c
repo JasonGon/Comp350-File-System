@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -21,14 +22,17 @@ int main() {
 	static unsigned char freeMap[DISK_BLOCKS];	// A 0 means a spot is free and 1 means full
 	static char fileTable[DISK_BLOCKS][64];		// " " means no file
 
-	printf("\nDisk formatted successfully. FreeMap blocks 0-9 are now allocated.\n\n");
+	printf("\nDisk formatted successfully. FreeMap blocks 0-9 are now allocated.\n");
 
 	// Run forever
 	while (true) {
 
+		// Flush the stream
+		fflush(stdout);
+
 		// Print the commands available
-		printf("Available Commands:\n");
-		printf("1: format\n2: create <filename>\n3: read <filename>\n4: write <filename> <type the content after the prompt>\n5: delete <filename>\n6: ls\n7: exit\n");
+		printf("\nAvailable Commands:\n");
+		printf("1: format\n2: create <filename>\n3: read <filename>\n4: write <filename> <type the content after the prompt>\n5: delete <filename>\n6: ls\n7: exit\n\n");
 
 		// Ignore empty lines
 		if (fgets(input, 40, stdin) == NULL){
@@ -36,40 +40,44 @@ int main() {
 		}
 
 		// 1. Reformats the entire disk
-		if (strcmp(input, "format\n") == 0) {
+		else if (strcmp(input, "format\n") == 0) {
 			printf("\nReformatting disk...\n");
 
 			// Wipe the freeMap and fileTable
-			for (int i = 0; i < 100; i++){
-				freeMap[i] = 0;
-				//fileTable[i] = "";
+			for (int i = 10; i < 100; i++){
+
+				// If the slot has something, remove it
+				if (freeMap[i] == 1){
+					freeMap[i] = 0;
+					strcmp(fileTable[i], "");
+				}
 			}
 			printf("\nDone!\n\n");
 		}
 
 
 		// 7. Exit the program
-		if (strcmp(input, "exit\n") == 0){
+		else if (strcmp(input, "exit\n") == 0){
 			break;
 		}
 
-		// 2. Create a file (WIP)
-		if (strcmp(input, "create\n") == 0){
+		// 2. Create a file
+		else if (strcmp(input, "create\n") == 0){
 			printf("\nPlease enter a file name:\n");
 
-			char name[100];
+			char name[100];		// Name will be the new file created
 			scanf("%s", name);
 
 			// Loop through the freeMap until you find an empty slot
-			for (int i = 0; i < 100; i++){
+			for (int i = 10; i < 100; i++){
 				if (freeMap[i] == 0){
-
 					// That spot becomes the new file
 					freeMap[i] = 1;
-					//fileTable[i] = name;
+					strcpy(fileTable[i], name);
 					break;
 				}
 			}
+			printf("\nDone!\n\n");
 		}
 
 
