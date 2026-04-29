@@ -85,7 +85,7 @@ int main() {
 
 		// 3. Read (Given a filename, finds block, and prints content on screen)
 		else if (strncmp(input, "read ", 5) == 0) {
-			char filename[32];
+			char filename[100];
 			// reads filename after "read ".
 			sscanf(input + 5, "%s", filename);
 			// keeping track if we find the file.
@@ -109,7 +109,7 @@ int main() {
 		else if (strcmp(input, "ls\n") == 0){
 
 			// Loop through each spot
-			for (int i = 10; i < 100; i++){
+			for (int i = 10; i < DISK_BLOCKS; i++){
 
 				// If there is something there, print it
 				if (freeMap[i] == 1){
@@ -118,7 +118,7 @@ int main() {
 			}
 		}
 		else if (strncmp(input, "delete ", 7) == 0) { //delete function
-			char filename[64];
+			char filename[100];
 			sscanf(input + 7, "%s", filename);
 
 			bool found = false;
