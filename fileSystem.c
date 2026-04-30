@@ -8,7 +8,7 @@
 int main() {
 
 	// The user input determines which function to run
-	char input[40];
+	char input[80];
 
 	// Set up a virtual disk
 	#define DISK_BLOCKS 100	         // Disk has 100 empty slots
@@ -35,9 +35,14 @@ int main() {
 		fflush(stdout);
 
 		// Ignore empty lines
-		if (fgets(input, 40, stdin) == NULL){
+		if (fgets(input, 80, stdin) == NULL){
 			continue;
 		}
+
+		if (input[strcspn(input, "\n")] == '\0' && strlen(input) == 79) {
+            int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF);
+        }
 
 		// 1. Reformats the entire disk
 		else if (strcmp(input, "format\n") == 0) {
@@ -55,7 +60,6 @@ int main() {
 			printf("\nDone!\n\n");
 		}
 
-
 		// 7. Exit the program
 		else if (strcmp(input, "exit\n") == 0){
 			break;
@@ -64,8 +68,12 @@ int main() {
 		// 2. Create a file
 		else if (strncmp(input, "create ", 7) == 0){
 
-			char name[64];		// Name will be the new file created
-			sscanf(input + 7, "%s", name);
+			char name[65];		// Name will be the new file created
+			sscanf(input + 7, "%64s", name);
+			if (strlen(name) > 64) {
+  				printf("\nFilename too long. Must be 64 characters or fewer. Please try again.\n\n");
+  				continue;
+			}
 			int location;
 			// Loop through the freeMap until you find an empty slot
 			for (int i = 10; i <= 100; i++){
@@ -120,7 +128,6 @@ int main() {
 					printf("%s\n", fileTable[i]);
 				}
 			}
-
 			printf("\n");
 		}
 
@@ -146,29 +153,29 @@ int main() {
 
 		else if (strncmp(input, "write ", 6) == 0) {
 			char filename[64];
-      			sscanf(input + 6, "%s", filename);
+      		sscanf(input + 6, "%s", filename);
 
-      			bool found = false;
-      			for (int i = 10; i < DISK_BLOCKS; i++) {
-        			if (freeMap[i] == 1 && strcmp(fileTable[i], filename) == 0) {
-          				printf("Enter content to write to '%s':\n", filename);
-          				fflush(stdout);
+      		bool found = false;
+      		for (int i = 10; i < DISK_BLOCKS; i++) {
+        		if (freeMap[i] == 1 && strcmp(fileTable[i], filename) == 0) {
+        			printf("Enter content to write to '%s':\n", filename);
+          			fflush(stdout);
 
-          				char content[BLOCK_SIZE];
-          				if (fgets(content, BLOCK_SIZE, stdin) != NULL) {
-            					content[strcspn(content, "\n")] = '\0';
-            					strncpy(disk[i], content, BLOCK_SIZE - 1);
-            					disk[i][BLOCK_SIZE - 1] = '\0';
-            					printf("\nDone!\n\n");
-          				}
-          				found = true;
-          				break;
-        			}
-      			}
+          			char content[BLOCK_SIZE];
+          			if (fgets(content, BLOCK_SIZE, stdin) != NULL) {
+            				content[strcspn(content, "\n")] = '\0';
+            				strncpy(disk[i], content, BLOCK_SIZE - 1);
+            				disk[i][BLOCK_SIZE - 1] = '\0';
+            				printf("\nDone!\n\n");
+          			}
+          			found = true;
+          			break;
+        		}
+      		}
 
-      			if (!found) {
-       				printf("\nFile '%s' not found.\n", filename);
-      			}
-    		}
+      		if (!found) {
+       			printf("\nFile '%s' not found.\n", filename);
+      		}
+    	}
 	}
 }
