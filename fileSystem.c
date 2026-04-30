@@ -23,15 +23,16 @@ int main() {
 
 	printf("\nDisk formatted successfully. FreeMap blocks 0-9 are now allocated.\n");
 
+  // Print the commands available
+	printf("\nAvailable Commands:\n");
+	printf("1: format\n2: create <filename>\n3: read <filename>\n4: write <filename> <type the content after the prompt>\n5: delete <filename>\n6: ls\n7: exit\n\n");
+
 	// Run forever
 	while (true) {
+	printf("> ");
 
 		// Flush the stream
 		fflush(stdout);
-
-		// Print the commands available
-		printf("\nAvailable Commands:\n");
-		printf("1: format\n2: create <filename>\n3: read <filename>\n4: write <filename> <type the content after the prompt>\n5: delete <filename>\n6: ls\n7: exit\n\n");
 
 		// Ignore empty lines
 		if (fgets(input, 40, stdin) == NULL){
@@ -48,7 +49,7 @@ int main() {
 				// If the slot has something, remove it
 				if (freeMap[i] == 1){
 					freeMap[i] = 0;
-					strcmp(fileTable[i], "");
+					memset(fileTable[i], 0, 64);
 				}
 			}
 			printf("\nDone!\n\n");
@@ -63,7 +64,7 @@ int main() {
 		// 2. Create a file
 		else if (strncmp(input, "create ", 7) == 0){
 
-			char name[100];		// Name will be the new file created
+			char name[64];		// Name will be the new file created
 			sscanf(input + 7, "%s", name);
 			int location;
 			// Loop through the freeMap until you find an empty slot
@@ -84,7 +85,7 @@ int main() {
 
 		// 3. Read (Given a filename, finds block, and prints content on screen)
 		else if (strncmp(input, "read ", 5) == 0) {
-			char filename[100];
+			char filename[64];
 			// reads filename after "read ".
 			sscanf(input + 5, "%s", filename);
 			// keeping track if we find the file.
@@ -102,22 +103,30 @@ int main() {
 			if (!found) {
 				printf("Error File '%s' was not found.\n", filename);
 			}
+
+			printf("\n");
 		}
 
 		// 6. LS (Reads all files on the disk)
 		else if (strcmp(input, "ls\n") == 0){
+
+			printf("\n");
 
 			// Loop through each spot
 			for (int i = 10; i < DISK_BLOCKS; i++){
 
 				// If there is something there, print it
 				if (freeMap[i] == 1){
-					printf("\n%s\n\n", fileTable[i]);
+					printf("%s\n", fileTable[i]);
 				}
 			}
+
+			printf("\n");
 		}
+
+
 		else if (strncmp(input, "delete ", 7) == 0) { //delete function
-			char filename[100];
+			char filename[64];
 			sscanf(input + 7, "%s", filename);
 
 			bool found = false;
@@ -134,5 +143,32 @@ int main() {
 				printf("\nFile '%s' not found.\n", filename);
 			}
 		}
+
+		else if (strncmp(input, "write ", 6) == 0) {
+			char filename[64];
+      			sscanf(input + 6, "%s", filename);
+
+      			bool found = false;
+      			for (int i = 10; i < DISK_BLOCKS; i++) {
+        			if (freeMap[i] == 1 && strcmp(fileTable[i], filename) == 0) {
+          				printf("Enter content to write to '%s':\n", filename);
+          				fflush(stdout);
+
+          				char content[BLOCK_SIZE];
+          				if (fgets(content, BLOCK_SIZE, stdin) != NULL) {
+            					content[strcspn(content, "\n")] = '\0';
+            					strncpy(disk[i], content, BLOCK_SIZE - 1);
+            					disk[i][BLOCK_SIZE - 1] = '\0';
+            					printf("\nDone!\n\n");
+          				}
+          				found = true;
+          				break;
+        			}
+      			}
+
+      			if (!found) {
+       				printf("\nFile '%s' not found.\n", filename);
+      			}
+    		}
 	}
 }
