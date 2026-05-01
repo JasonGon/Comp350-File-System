@@ -54,7 +54,7 @@ int main() {
 				if (freeMap[i] == 1){
 					freeMap[i] = 0;
 					memset(fileTable[i], 0, 64);
-          memset(disk[i], 0, BLOCK_SIZE);
+          			memset(disk[i], 0, BLOCK_SIZE);
 				}
 			}
 			printf("\nDone!\n\n");
