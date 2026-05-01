@@ -74,7 +74,7 @@ int main() {
   				printf("\nFilename too long. Must be 64 characters or fewer. Please try again.\n\n");
   				continue;
 			}
-			int location;
+
 			// Loop through the freeMap until you find an empty slot
 			for (int i = 10; i <= 100; i++){
 				if (freeMap[i] == 0 && i < 100){
@@ -137,7 +137,7 @@ int main() {
 			sscanf(input + 7, "%s", filename);
 
 			bool found = false;
-			for (int i = 0; i < DISK_BLOCKS; i++) {
+			for (int i = 10; i < DISK_BLOCKS; i++) {
 				if(strcmp(fileTable[i], filename) == 0) {
 					freeMap[i] = 0;
 					memset(disk[i], 0, BLOCK_SIZE);
